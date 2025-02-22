@@ -10,6 +10,22 @@
   {% block head %} {% endblock %}
 </head>
 <body>
-  {% block body %} {% endblock %}
+  {% block body %} 
+  <nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
+    <a href="/" class="text-2xl font-bold">Breached Beaver</a>
+    <div>
+        <a href="/" class="px-4 py-2 hover:bg-blue-700 rounded">Home</a>
+        <a href="/dashboard" class="px-4 py-2 hover:bg-blue-700 rounded">Dashboard</a>
+    </div>
+  </nav>
+
+  <footer class="bg-gray-800 text-white text-center p-4 mt-8">
+    <p>© 2025 Breached Beaver | Hackathon Project</p>
+  </footer>
+
+
+
+
+  {% endblock %}
 </body>
 </html>
