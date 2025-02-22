@@ -26,16 +26,11 @@ def dashboard():
         file = form.file.data
         data = pandas.read_csv(file)
 
-        """
         
-        for index, row in data.iterrows():
-            data["Quan"]
-product = data["Product"]
-units = data["Units"]
-cost_unit = data["Cost/Unit"]
-total_cost = data["Total Cost"]
+        columns_list = data.columns
 
-        """
+        for index, row in data.iterrows():
+            print(index, row)
         
         """
         TO DO 
