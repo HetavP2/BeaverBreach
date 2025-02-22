@@ -2,8 +2,14 @@
 
 {% block head %}
 <style>
+  :root {
+    --bg-position: 0%;
+  }
+
   .hero-bg {
-    background: linear-gradient(to right, rgb(255, 255, 255), #ffd2d2);
+    background: linear-gradient(to right, #ffffff, #ffe6e6);
+    background-size: 200% 100%;
+    background-position: var(--bg-position) 0;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -11,6 +17,7 @@
     position: relative;
     text-align: center;
     padding: 2rem;
+    transition: background-position 0.1s linear;
   }
 
   /* Canadian flag-style sidebars */
@@ -19,7 +26,7 @@
     top: 0;
     bottom: 0;
     width: 20%;
-    background: rgb(200, 0, 0); /* Dark red, similar to the Canadian flag */
+    background: rgb(200, 0, 0);
   }
 
   .left-bar {
@@ -33,6 +40,10 @@
   .content {
     z-index: 10;
     max-width: 600px;
+  }
+
+  .content h1 {
+    color: #8b0000; /* Dark red */
   }
 
   .cta-button {
@@ -54,22 +65,30 @@
 
 {% block body %}
 <div class="hero-bg">
-    <!-- Sidebars for Canadian flag effect -->
     <div class="side-bar left-bar"></div>
     <div class="side-bar right-bar"></div>
 
-    <!-- Main Content -->
-    <div class="content text-white">
+    <div class="content">
         <h1 class="text-5xl font-bold mb-4">Welcome to Breached Beaver</h1>
-        <p class="text-lg opacity-80">
-            Analyzing supply chain efficiency with AI. Compare Canadian suppliers and understand tariffs in real-time.
+        <p class="text-lg opacity-100">
+            Analyze Tariff Impact. Find Canadian Suppliers. Make Optimal Decisions With Gemini.
         </p>
         <a href="/dashboard" class="cta-button shadow-lg">Get Started</a>
     </div>
 </div>
+
+<script>
+  let position = 0;
+  function animateBackground() {
+    position += 10; // Adjust speed by changing this value
+    if (position > 100) position = 0;
+    document.documentElement.style.setProperty("--bg-position", position + "%");
+    requestAnimationFrame(animateBackground);
+ }
+  animateBackground();
+</script>
+
 {% endblock %}
-
-
 
 <!-- todo -->
 <!-- style dashboard, give data to gemini and generate response, create upload for csv and save to firebase  -->

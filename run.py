@@ -14,10 +14,7 @@ firebase_admin.initialize_app(credentials.Certificate("serviceAccountKey.json"),
 })
 db = firestore.client()
 
-# Add data to Firestore
-doc_ref = db.collection("proposedchange").document("user1")
-# doc_ref.set({"name": "Alice", "email": "alice@example.com"})
-print(db)
+
 
 # Retrieve data
 # user_doc = db.collection("users").document("user1").get()
@@ -38,9 +35,14 @@ def dashboard():
     if form.validate_on_submit():
         file = form.file.data
         data = pandas.read_csv(file)
-        columns_list = data.columns
+        columns = data.columns
         for index, row in data.iterrows():
-            print(index, row)
+            ref = db.collection("inventory_updates").document(f"entry{index}")
+            ref.set({
+               str(columns[0]): str(row[0]),
+               str(columns[1]): str(row[1]),
+               str(columns[2]): str(row[2]),
+            })
         
         """
         TO DO 
