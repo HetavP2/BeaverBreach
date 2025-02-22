@@ -6,6 +6,7 @@ from wtforms import FileField, SubmitField, StringField
 import pandas, dotenv, os
 import google.generativeai as genai
 from werkzeug.utils import secure_filename
+from serpapi import GoogleSearch
 
 
 dotenv.load_dotenv(".env")
@@ -36,31 +37,45 @@ def home():
 def loading():
     return render_template('loading.html')
 
-
 @app.route('/dashboard', methods=["GET", "POST"])
 def dashboard():
     form = uploadFile()
     if form.validate_on_submit():
-        file=request.files['file']
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config["UPLOADFOLDER"], filename)
-        file.save(file_path)  # Save file temporarily
-        
-        # Upload file to Gemini AI
-        uploaded_file = genai.upload_file(file_path)
-        print(f"File uploaded successfully! File ID: {uploaded_file.name}")
-   
-        # file = form.file.data
-        # file.read()
-        # data = pandas.read_csv(file)
-        # columns = data.columns
-        # for index, row in data.iterrows():
-        #     ref = db.collection("inventory_updates").document(f"{row[1]}")
-        #     entry = {}
-        #     for i in range(len(row)):   
-        #         entry[columns[i]] = row[i]
-        #     ref.set(entry)
-        # return redirect(url_for('analytics'))
+        file = form.file.data
+        data = pandas.read_csv(file)
+        columns = data.columns
+        print(data)
+        for index, row in data.iterrows():
+            # looping thru each
+            # ref = db.collection("inventory_updates").document(f"{row[index]}")
+            entry = {}
+            for i in range(len(row)):   
+                entry[columns[i]] = row[i]
+            # do analysis on each
+            print(entry)
+            #1.) pass to serp shopping api to find Canadian supplier
+            params = {
+            "engine": "google_shopping",
+            "q": entry["product_name"]+" nearby manufactured in Canada",
+            "api_key": "fb780cada7255e9b5a6b8ba072632893e11060b8d6799bb877f8bb2072e43a74",
+            "gl": "ca",
+            }
+
+            search = GoogleSearch(params)
+            results = search.get_dict()
+            shopping_results = results["shopping_results"]
+            print(shopping_results)
+            
+
+            #2.) calculate carbon footprint for canadian supplier and american supplier
+            # 3.) calculate change in cost price and profit margin
+
+
+
+
+
+            # ref.set(entry)
+        return redirect(url_for('analytics'))
     return render_template('dashboard.html', form=form)
 
 chat_his=[]
