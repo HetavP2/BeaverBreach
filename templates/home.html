@@ -40,22 +40,29 @@
   /* Title and slogan at the top */
   .header-content {
     position: absolute;
-    top: 2rem; /* Adjust the distance from the top */
+    top: 3rem; /* Adjust the distance from the top */
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    z-index: 10;
+    z-index: 15;
+  }
+
+  /* Whitish red box around the title */
+  .title-box {
+    background-color: rgba(119, 0, 0); /* Whitish red background with opacity */
+    padding: 1rem;
+    border-radius: 10px;
   }
 
   .header-content h1 {
-    color: #8b0000; /* Dark red */
+    color: rgb(255, 255, 255); /* Dark red */
     font-size: 5rem; /* Increased size for larger title */
     font-weight: bold; /* Bold font */
     margin-bottom: 0.5rem;
   }
 
   .header-content p {
-    color: #8b0000; /* Dark red */
+    color: #ffffff; /* Dark red */
     font-size: 1.25rem; /* Adjust font size for smaller text */
   }
 
@@ -67,8 +74,9 @@
 
   .content p {
     color: #8b0000; /* Dark red */
-    font-size: 1.25rem; /* Adjust font size for smaller text */
-    margin-top: 1rem;
+    font-size: 2.25rem;
+    font-weight: bold; /* Adjust font size for smaller text */
+    margin-top: 1.5rem;
   }
 
   .cta-button {
@@ -95,7 +103,9 @@
 
     <!-- Title and slogan at the top -->
     <div class="header-content">
-        <h1>Breached Beaver</h1>
+        <div class="title-box">
+            <h1> Breached Beaver </h1>
+        </div>
         <p>We're not paying your ransom</p>
     </div>
 
