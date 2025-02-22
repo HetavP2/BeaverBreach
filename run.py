@@ -25,7 +25,7 @@ class uploadFile(FlaskForm):
     upload=SubmitField("Upload")
 
 class chatting(FlaskForm):
-    chat_prompt=StringField("Enter your question")
+    chat_prompt=StringField("What's on your mind today?")
     submit=SubmitField("Submit")
 
 @app.route('/')
@@ -53,27 +53,26 @@ def dashboard():
                 entry[columns[i]] = row[i]
             ref.set(entry)
             
-        """
-        TO DO 
-        - retrieve data from apps script from firebase
-        """
     return render_template('dashboard.html', form=form, form2=form2)
-
 @app.route('/chat', methods=["GET", "POST"])
 def send_to_Gemini():
     form2= chatting()
     if (request.method == "POST"):
         if form2.validate_on_submit():
-            prmpt= form2.chat_prompt.data
-            print(prmpt)
-            res = model.generate_content("prmpt")
-            
-    return redirect(url_for("dashboard", response = res.text))
+            pass
+            # data= form2.chat_prompt.data
+            # msg=data.get('chat', '')
+            # chat_history=data.get('history', [])
+            # chat_sess=model.start_chat(history=[chat_history])
+            # print(prmpt)
+            # res = model.generate_content("prmpt")
+            # print(res.text)
+    return redirect(url_for("dashboard"))
 
     
     # inventory_updates = db.collection("inventory_updates").document(doc).get()
-    res = model.generate_content("This is a python dictionary:", inventory_updates, "Based on the information provided - product_id,product_name,product_descp,product_image,og_inventory,og_supplier,og_supplier_info,og_cfoot,og_price- for the store I need you to search on google for canadian suppliers that can offer this product.")
-    print(res.text)
+    # res = model.generate_content("This is a python dictionary:", inventory_updates, "Based on the information provided - product_id,product_name,product_descp,product_image,og_inventory,og_supplier,og_supplier_info,og_cfoot,og_price- for the store I need you to search on google for canadian suppliers that can offer this product.")
+    # print(res.text)
     # inventory_updates has this format: {'Product': 'Apple', 'Cost/Unit': '50', 'Units': '2'}
     # just send this obj to gemini 
     
