@@ -4,11 +4,12 @@ from firebase_admin import credentials as cred
 from firebase_admin import db
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
-import pandas 
-impo
+import pandas,os
+from werkzeug.utils import secure_filename
 
 app= Flask(__name__)
-app.config['SECRET_KEY']="shhh"
+app.config['SECRET_KEY']="123443525"
+app.config['UPLOAD_FOLDER']="allfiles"
 
 class uploadFile(FlaskForm):
     file=FileField("File")
@@ -23,10 +24,19 @@ def dashboard():
     form = uploadFile()
     if form.validate_on_submit():
         file = form.file.data
-        
-        # file.save
-        print(file)
         data = pandas.read_csv(file)
+
+        """
+        
+        for index, row in data.iterrows():
+            data["Quan"]
+product = data["Product"]
+units = data["Units"]
+cost_unit = data["Cost/Unit"]
+total_cost = data["Total Cost"]
+
+        """
+        
         """
         TO DO 
         - add data to firebase 
