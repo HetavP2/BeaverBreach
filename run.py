@@ -5,6 +5,8 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField, StringField
 import pandas, dotenv, os
 import google.generativeai as genai
+from werkzeug.utils import secure_filename
+
 
 dotenv.load_dotenv(".env")
 
@@ -13,17 +15,6 @@ app.config['SECRET_KEY']=os.getenv("SECRET_KEY")
 API_KEY=os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-pro")
-
-# samplehis=[]
-# chat1 = model.start_chat(history=samplehis)
-# user_message = "I sold 60 units of stock."
-# response = chat1.send_message(user_message)
-# samplehis.append(response)
-# response = chat1.send_message("How much stock did i sell?", stream=True)
-# for chunk in response:
-#     print(chunk.text, end="", flush=True)
-
-
 
 firebase_admin.initialize_app(credentials.Certificate("serviceAccountKey.json"), {
     'databaseURL': ''
@@ -50,16 +41,26 @@ def loading():
 def dashboard():
     form = uploadFile()
     if form.validate_on_submit():
-        file = form.file.data
-        data = pandas.read_csv(file)
-        columns = data.columns
-        for index, row in data.iterrows():
-            ref = db.collection("inventory_updates").document(f"{row[1]}")
-            entry = {}
-            for i in range(len(row)):   
-                entry[columns[i]] = row[i]
-            ref.set(entry)
-        return redirect(url_for('analytics'))
+        file=request.files['file']
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config["UPLOADFOLDER"], filename)
+        file.save(file_path)  # Save file temporarily
+        
+        # Upload file to Gemini AI
+        uploaded_file = genai.upload_file(file_path)
+        print(f"File uploaded successfully! File ID: {uploaded_file.name}")
+   
+        # file = form.file.data
+        # file.read()
+        # data = pandas.read_csv(file)
+        # columns = data.columns
+        # for index, row in data.iterrows():
+        #     ref = db.collection("inventory_updates").document(f"{row[1]}")
+        #     entry = {}
+        #     for i in range(len(row)):   
+        #         entry[columns[i]] = row[i]
+        #     ref.set(entry)
+        # return redirect(url_for('analytics'))
     return render_template('dashboard.html', form=form)
 
 chat_his=[]

@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+ 
+ body {
+  font-family: 'Poppins', sans-serif;
+}
+
+  :root {
+    --bg-position: 0%;
+  }
+   
+  .hero-bg {
+    background: radial-gradient(rgb(53, 0, 0), #000000); /* Dark red to black */
+    background-size: 200% 100%;
+    background-position: var(--bg-position) 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
+    padding: 2rem;
+    transition: background-position 3s linear;
+  }
+
+  /* Title and slogan at the top */
+  .header-content {
+    position: absolute;
+    top: 1.5rem; /* Adjust the distance from the top */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 15;
+  }
+
+  /* Whitish red box around the title */
+  .title-box {
+    background-color: rgba(119, 0, 0); /* Whitish red background with opacity */
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .header-content h1 {
+    color: rgb(255, 255, 255); /* Dark red */
+    font-size: 3rem; /* Increased size for larger title */
+    font-weight: bold; /* Bold font */
+    margin-bottom: 0.5rem;
+  }
+
+  .header-content p {
+    color: rgb(70, 0, 0); /* Dark red */
+    font-size: 1.25rem; /* Adjust font size for smaller text */
+    margin-top: .5rem;
+  }
+
+  .content {
+  z-index: 10;
+  max-width: 650px;
+  text-align: center;
+  position: relative; /* Add this */
+  top: 50px; /* Adjust the top value to lower it */
+}
+
+  .content p {
+    color: #570000; /* Dark red */
+    font-size: 1.5rem;
+    font-weight: bold; /* Adjust font size for smaller text */
+    margin-top: 2.5rem;
+  }
+
+  .cta-button {
+    background-color: rgb(110, 0, 0);
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 36px 144px;
+    border-radius: 16px;
+    display: inline-block;
+    margin-top: 50px;
+    transition: background 0.2s;
+  }
+
+  .cta-button:hover {
+    background-color: rgb(14, 0, 0);
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="hero-bg">
+    <div class="side-bar left-bar"></div>
+    <div class="side-bar right-bar"></div>
+
+    <!-- Title and slogan at the top -->
+    <div class="header-content">
+        <div class="title-box">
+            <h1> Breached Beaver </h1>
+        </div>
+        <p>We're Not Paying Your Ransom.</p>
+    </div>
+
+    <!-- Centered content below the header -->
+    <div class="content">
+        <p class="text-lg opacity-100">
+            Analyze Tariff Impact. Find Canadian Suppliers. Make Optimal Decisions With The Help Of AI.
+        </p>
+        <a href="/dashboard" class="cta-button shadow-lg">Get Started</a>
+    </div>
+</div>
+
+<script>
+  let position = 0;
+  function animateBackground() {
+    position += 10; // Adjust speed by changing this value
+    if (position > 100) position = 0;
+    document.documentElement.style.setProperty("--bg-position", position + "%");
+    requestAnimationFrame(animateBackground);
+ }
+  animateBackground();
+</script>
+
+{% endblock %}
+
+<!-- todo -->
+<!-- style dashboard, give data to gemini and generate response, create upload for csv and save to firebase -->
+<!--  -->
