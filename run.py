@@ -75,7 +75,7 @@ def analytics():
                 pass
                 # print(chunk.text, end="", flush=True)
                 # print(chunk.candidates[0].content.role)
-            print(res)
+            # print(res)
             chat_his.append(res)
         
     

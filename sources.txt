@@ -1,3 +1,5 @@
 https://www.geeksforgeeks.org/different-ways-to-iterate-over-rows-in-pandas-dataframe/
 
 file upload - https://www.youtube.com/watch?v=GeiUTkSAJPs
+
+for analytics chatbot inspiration https://www.creative-tim.com/twcomponents/component/chat-box

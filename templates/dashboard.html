@@ -4,17 +4,17 @@
     <style>
         /* Add custom styles for the gradient background */
         .gradient-bg {
-            background: radial-gradient(rgb(3, 0, 0), #470006); /* Dark red to lighter red */
+            background: radial-gradient(rgb(31, 0, 0), #000000); /* Dark red to black */
         }
 
         /* Dark red color theme */
         .btn-primary {
             background-color: #350009;
-            border-color: #ff0000;
+            border-color: #ffffff;
         }
         .btn-primary:hover {
             background-color: #0a0001;
-            border-color: #92000c;
+            border-color: #ffffff;
         }
         .text-dark-red {
             color: #9B1B30;
@@ -27,14 +27,14 @@
 
         /* Styles for form input and buttons */
         input[type="file"], .btn-upload {
-            background-color: #5f001000;
+            background-color: transparent;
+            align-content: center;
             color: rgb(0, 0, 0);
-            border: 2px solid #ca0000;
-            /* Removed background from file input */
+            border: 2px solid #ffffff;
         }
         input[type="file"]:hover, .btn-upload:hover {
-            background-color: #ff0015;
-            border: 2px solid #E63946;
+            background-color: rgba(29, 0, 2, 0.233);
+            border: 2px solid #ffffff;
         }
 
         /* Remove background for the "Choose File" label text */
@@ -47,41 +47,87 @@
         /* Style for the file input label */
         .file-label {
             background-color: transparent;
-            border: 2px solid #ca0000;
-            padding: 10px;
+            border: 2px solid #3d000091;
+            padding: 20px; /* Increased padding */
             cursor: pointer;
+            border-radius: 10px;
+            text-align: center; /* Center align */
         }
 
         .file-label:hover {
-            background-color: #ff0015;
+            background-color: #3a000504;
+        }
+
+        /* Adjust spacing for file input text */
+        .file-input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem; /* Increased spacing */
+        }
+
+        /* Increased size for the upload box */
+        .upload-box {
+            max-width: 2xl; /* Increased width */
+            padding: 12rem 2rem; /* Increased height */
+            position: relative;
+            background: white;
+            z-index: 1;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Gradient border effect */
+        .upload-box::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #ffffff, rgba(255, 0, 0, 0.295));
+            border-radius: 15px;
+            z-index: -1;
+        }
+
+        /* Adjusted text size */
+        .title {
+            font-size: 1.75rem; /* 1.5x the original size */
+            font-weight: 600; /* Slightly bold */
+        }
+
+        /* Adjusted file text size */
+        .file-text {
+            font-size: 1.50rem; /* Increased size */
+            opacity: 0.9; /* 90% opacity */
         }
     </style>
 {% endblock %}
 
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen gradient-bg">
-    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-semibold text-1000 text-center">Upload CSV File</h2>
+    <div class="upload-box w-full max-w-2xl p-12"> <!-- Increased padding for height -->
+        <h2 class="title text-4xl font-semibold text-center">Upload CSV File</h2> <!-- Increased title size -->
         
-        <form method="POST" enctype="multipart/form-data" class="mt-4">
+        <form method="POST" enctype="multipart/form-data" class="mt-6">
             {{ form.hidden_tag() }}
 
-            <label class="block font-medium mb-2">Choose File:</label>
-            <div class="flex items-center justify-center w-full">
-                <label for="file" class="file-label w-full flex flex-col items-center px-4 py-6 bg-gray-200 text-800 rounded-lg shadow-lg tracking-wide uppercase cursor-pointer hover:bg-blue-500 hover:text-white">
-                    <svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 20 20">
+            <div class="file-input-container">
+                <label for="file" class="file-label w-full flex flex-col items-center px-4 py-8 bg-gray-200 text-800 rounded-lg shadow-lg tracking-wide uppercase cursor-pointer hover:bg-blue-500 hover:text-white">
+                    <svg class="w-12 h-12 mb-4" fill="currentColor" viewBox="0 0 20 20"> <!-- Enlarged icon -->
                         <path d="M16.88 10.17A5 5 0 0015 2a4.93 4.93 0 00-3.06 1.06A4.93 4.93 0 009 2a5 5 0 00-1.88 9.17A7 7 0 003 18h14a7 7 0 00-0.12-7.83zM8 14v-2h4v2H8z"></path>
                     </svg>
-                    {{ form.file() }}
-                    <span class="text-sm">Select a CSV File</span>
+                    {{ form.file(class="block w-full text-center") }} <!-- Center-aligned input -->
+                    <span class="file-text">Select a CSV File</span> <!-- Increased text size & opacity -->
                 </label>
             </div>
 
-            {{ form.upload(class="btn-upload mt-4 w-full px-4 py-2 rounded-lg shadow") }}
+            {{ form.upload(class="btn-upload mt-6 w-full px-4 py-3 rounded-lg shadow") }} <!-- Adjusted spacing -->
         </form>
 
         {% if table_data %}
-            <h3 class="text-lg font-semibold text-dark-red mt-6">Preview:</h3>
+            <h3 class="text-lg font-semibold text-dark-red mt-8">Preview:</h3> <!-- Adjusted spacing -->
             <div class="overflow-x-auto mt-2">
                 {{ table_data | safe }}
             </div>
