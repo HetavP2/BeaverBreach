@@ -106,8 +106,8 @@
         }
     </style>
 {% endblock %}
-
-{% block body %}
+<body>
+{% block content %}
 <div class="flex flex-col items-center justify-center min-h-screen gradient-bg">
     <div class="upload-box w-full max-w-2xl p-12"> <!-- Increased padding for height -->
         <h2 class="title text-4xl font-bold text-center">Upload CSV File</h2> <!-- Increased title size -->
@@ -137,3 +137,5 @@
     </div>
 </div>
 {% endblock %}
+{% block footer %}{% endblock %}
+</body>

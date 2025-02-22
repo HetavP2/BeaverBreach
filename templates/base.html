@@ -6,35 +6,40 @@
   <title>BeaverBreach</title>
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com/" />
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
   <style type="text/tailwindcss">
     @theme {
       --color-clifford: #da373d;
       --color-darkred: rgb(51, 2, 2);
       --color-nightblack: #000000;
       --color-evilred: #2e0000;
-      
+      --font-display: "Poppins", "sans-serif";
     }
   </style>
-  {% block head %} {% endblock %}
+  {% block head %}
+   {% endblock %}
 </head>
 
-<body class="w-screen h-fit overflow-y-scroll overflow-x-clip">
-  <nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
+<body class="w-screen h-screen overflow-y-scroll overflow-x-clip bg-black font-display">
+  <nav class="bg-evilred text-white p-4 flex justify-between items-center">
     <a href="/" class="text-2xl font-bold">Breached Beaver</a>
     <div>
-        <a href="/" class="px-4 py-2 hover:bg-blue-700 rounded">Home</a>
-        <a href="/dashboard" class="px-4 py-2 hover:bg-blue-700 rounded">Dashboard</a>
+        <a href="/" class="px-4 py-2 hover:underline rounded">Home</a>
+        <a href="/dashboard" class="px-4 py-2 rounded hover:underline ">Dashboard</a>
     </div>
   </nav>
 
-  <footer class="bg-gray-800 text-white text-center p-4 mt-8">
-    <p>© 2025 Breached Beaver | Hackathon Project</p>
+  <div class="w-full h-fit">{% block content %}{% endblock %}</div>
+
+  <footer class="bg-evilred text-white text-center py-5">
+    <p class="">© 2025 Breached Beaver | Hackathon Project</p>
+    {% block footer %}{% endblock %}
   </footer>
 
-
-
-
-  {% block body %} 
-  {% endblock %}
 </body>
 </html>

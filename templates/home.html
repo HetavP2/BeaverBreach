@@ -3,34 +3,22 @@
 {% block head %}
 {% endblock %}
 
-{% block body %}
-<div class=" bg-red-500 h-full w-full flex items-center justify-center">
-  <main class="bg-white w-fit">
-    <h1 class="text-center ">BreachedBeaver</h1> 
+<body>
+{% block content %}
+<main class=" bg-[url_for('static', '/images/imagebackground.png')] bg-cover bg-opacity-35 h-5/6 flex flex-col items-center relative">
+    <div class="absolute bg-black w-full h-full opacity-70 right-0 left-0 top-0 bottom-0"></div>
+    <div class="z-40 justify-center flex flex-col w-1/2">
+      <h1 class=" text-white text-opacity-100 text-center text-6xl mt-24 font-semibold">Breached Beaver</h1>
+      <p class="text-white text-center mt-24 text-lg">Analyze Tariff Impact. <br> Find Canadian Suppliers. <br> Optimize with AI</p>
+      <a class="bg-evilred text-center text-white w-72 mx-auto rounded-lg py-4 mt-10" href="/dashboard">
+        Get Started
+      </a>
+    </div>
   </main>
-</div>
-
-    <div class="side-bar left-bar"></div>
-    <div class="side-bar right-bar"></div>
-
-    <!-- Title and slogan at the top -->
-    <div class="header-content">
-        <div class="title-box">
-            <h1> Breached Beaver </h1>
-        </div>
-        <p>We're Not Paying Your Ransom.</p>
-    </div>
-
-    <!-- Centered content below the header -->
-    <div class="content">
-        <p class="text-lg opacity-100">
-            Analyze Tariff Impact. Find Canadian Suppliers. Make Optimal Decisions With The Help Of AI.
-        </p>
-        <a href="/dashboard" class="cta-button shadow-lg">Get Started</a>
-    </div>
-</div>
-
-{% endblock %}
+  {% endblock %}
+  
+{% block footer %}{% endblock %}
+</body>
 
 <!-- todo -->
 <!-- style dashboard, give data to gemini and generate response, create upload for csv and save to firebase -->
