@@ -61,6 +61,7 @@ def dashboard():
 
 chat_his=[]
 chat1 = model.start_chat(history=chat_his)
+messages=[]
 
 @app.route('/analytics', methods=["GET", "POST"])
 def analytics():
@@ -68,12 +69,17 @@ def analytics():
     if (request.method == "POST"):
         if form2.validate_on_submit():
             message = form2.chat_prompt.data
+            messages.append(message)
             res = chat1.send_message(message, stream=True)
             for chunk in res:
-                print(chunk.text, end="", flush=True)
+                pass
+                # print(chunk.text, end="", flush=True)
+                # print(chunk.candidates[0].content.role)
+            print(res)
             chat_his.append(res)
+        
     
-    return render_template('analytics.html', form2=form2, chat_history = chat_his)
+    return render_template('analytics.html', form2=form2, chat_history = chat_his, messages=messages)
     
 if __name__ == '__main__':
     app.run()

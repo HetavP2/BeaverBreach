@@ -11,10 +11,11 @@ Analytics
 </form>
 <!--Chat Section-->
 <div>
-  {% for message in chat_history %}
-    {% if message.role == "assistant" %}
-      <div class="">{{ message.text }}</div>
-    {% else %}
+  {% for i in range(chat_history|length) %}
+    {% if chat_history[i].candidates[0].content.role == "model" %}
+    <div class="text-blue-500">{{ messages[i] }}</div>
+      <div class="text-red-500">{{ chat_history[i].text }}</div>
+
     {% endif %}
   {% endfor %}
   

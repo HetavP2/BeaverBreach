@@ -1,19 +1,74 @@
 {% extends "base.html" %}
 
-{% block head %} 
+{% block head %}
+    <style>
+        /* Add custom styles for the gradient background */
+        .gradient-bg {
+            background: radial-gradient(rgb(3, 0, 0), #470006); /* Dark red to lighter red */
+        }
+
+        /* Dark red color theme */
+        .btn-primary {
+            background-color: #350009;
+            border-color: #ff0000;
+        }
+        .btn-primary:hover {
+            background-color: #0a0001;
+            border-color: #92000c;
+        }
+        .text-dark-red {
+            color: #9B1B30;
+        }
+
+        /* Adjust text and border styles */
+        .form-label {
+            color: #cf0000;
+        }
+
+        /* Styles for form input and buttons */
+        input[type="file"], .btn-upload {
+            background-color: #5f001000;
+            color: rgb(0, 0, 0);
+            border: 2px solid #ca0000;
+            /* Removed background from file input */
+        }
+        input[type="file"]:hover, .btn-upload:hover {
+            background-color: #ff0015;
+            border: 2px solid #E63946;
+        }
+
+        /* Remove background for the "Choose File" label text */
+        label input[type="file"] {
+            background: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        /* Style for the file input label */
+        .file-label {
+            background-color: transparent;
+            border: 2px solid #ca0000;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .file-label:hover {
+            background-color: #ff0015;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+<div class="flex flex-col items-center justify-center min-h-screen gradient-bg">
     <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-semibold text-gray-700 text-center">Upload CSV File</h2>
+        <h2 class="text-2xl font-semibold text-1000 text-center">Upload CSV File</h2>
         
         <form method="POST" enctype="multipart/form-data" class="mt-4">
             {{ form.hidden_tag() }}
 
-            <label class="block text-gray-700 font-medium mb-2">Choose File:</label>
+            <label class="block font-medium mb-2">Choose File:</label>
             <div class="flex items-center justify-center w-full">
-                <label class="w-full flex flex-col items-center px-4 py-6 bg-gray-200 text-blue-600 rounded-lg shadow-lg tracking-wide uppercase border border-blue-300 cursor-pointer hover:bg-blue-500 hover:text-white">
+                <label for="file" class="file-label w-full flex flex-col items-center px-4 py-6 bg-gray-200 text-800 rounded-lg shadow-lg tracking-wide uppercase cursor-pointer hover:bg-blue-500 hover:text-white">
                     <svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M16.88 10.17A5 5 0 0015 2a4.93 4.93 0 00-3.06 1.06A4.93 4.93 0 009 2a5 5 0 00-1.88 9.17A7 7 0 003 18h14a7 7 0 00-0.12-7.83zM8 14v-2h4v2H8z"></path>
                     </svg>
@@ -22,27 +77,15 @@
                 </label>
             </div>
 
-            {{form.upload(class="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700")}}
-
-            <!-- <button type="submit" class="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">Upload</button> -->
+            {{ form.upload(class="btn-upload mt-4 w-full px-4 py-2 rounded-lg shadow") }}
         </form>
 
-
         {% if table_data %}
-            <h3 class="text-lg font-semibold text-gray-700 mt-6">Preview:</h3>
+            <h3 class="text-lg font-semibold text-dark-red mt-6">Preview:</h3>
             <div class="overflow-x-auto mt-2">
                 {{ table_data | safe }}
             </div>
         {% endif %}
-
-       
     </div>
 </div>
-<div>
-</div>
 {% endblock %}
-
-
-<!-- todo -->
-<!-- style dashboard, give data to gemini and generate response, create upload for csv and save to firebase  -->
-<!--  -->
