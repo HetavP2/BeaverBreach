@@ -41,6 +41,9 @@ class chatting(FlaskForm):
 @app.route('/')
 def home():
     return render_template('home.html')
+@app.route('/loading')
+def loading():
+    return render_template('loading.html')
 
 
 @app.route('/dashboard', methods=["GET", "POST"])
@@ -77,8 +80,8 @@ def analytics():
                 # print(chunk.candidates[0].content.role)
             # print(res)
             chat_his.append(res)
-        
-    
+            return redirect(url_for('analytics'))
+
     return render_template('analytics.html', form2=form2, chat_history = chat_his, messages=messages)
     
 if __name__ == '__main__':

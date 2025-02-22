@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col items-center">
+        <!-- Changing Text -->
+        <h2 id="loading-text" class="text-lg font-semibold text-gray-700 mb-4">Initializing...</h2>
+
+        <!-- Spinner -->
+        <div class="w-12 h-12 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+    </div>
+
+    <script>
+        // List of text updates
+        const messages = [
+            "Initializing...",
+            "Calculating carbon footprint...",
+            "Scraping...",
+            "Determing tariff...",
+            "Finalizing..."
+        ];
+
+        let index = 0;
+        function updateText() {
+            document.getElementById("loading-text").textContent = messages[index];
+            index = (index + 1) % messages.length;
+        }
+
+        // Change text every 2 seconds
+        setInterval(updateText, 2000);
+    </script>
+{% endblock %}

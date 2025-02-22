@@ -2,9 +2,11 @@
 
 {% block head %}
     <style>
-        /* Add custom styles for the gradient background */
+    
+    
+    /* Add custom styles for the gradient background */
         .gradient-bg {
-            background: radial-gradient(rgb(31, 0, 0), #000000); /* Dark red to black */
+            background: radial-gradient(rgb(53, 0, 0), #000000); /* Dark red to black */
         }
 
         /* Dark red color theme */
@@ -33,7 +35,7 @@
             border: 2px solid #ffffff;
         }
         input[type="file"]:hover, .btn-upload:hover {
-            background-color: rgba(29, 0, 2, 0.233);
+            background-color: rgba(29, 0, 2, 0.933);
             border: 2px solid #ffffff;
         }
 
@@ -94,7 +96,7 @@
         /* Adjusted text size */
         .title {
             font-size: 1.75rem; /* 1.5x the original size */
-            font-weight: 600; /* Slightly bold */
+            font-weight: 1000; /* Slightly bold */
         }
 
         /* Adjusted file text size */
@@ -108,7 +110,7 @@
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen gradient-bg">
     <div class="upload-box w-full max-w-2xl p-12"> <!-- Increased padding for height -->
-        <h2 class="title text-4xl font-semibold text-center">Upload CSV File</h2> <!-- Increased title size -->
+        <h2 class="title text-4xl font-bold text-center">Upload CSV File</h2> <!-- Increased title size -->
         
         <form method="POST" enctype="multipart/form-data" class="mt-6">
             {{ form.hidden_tag() }}
