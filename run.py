@@ -112,7 +112,7 @@ def dashboard():
             4.) Provide a specific explanation on what other factors (such as CBSA/USCBP, NAFTA, CUSMA, duty rates if applicable, etc) can affect the business's product amid the tarrifs. 
             Effective February 4, 2025, the government is imposing 25 per cent tariffs on $30 billion in goods imported from the United States (U.S.).
 
-These tariffs only apply to goods originating from the U.S., which shall be considered as those goods eligible to be marked as a good of the U.S. in accordance with the Determination of Country of Origin for the Purposes of Marking Goods (CUSMA Countries) Regulations.
+These tariffs only apply to goods originating from the U.S., which shall be considered as those goods eligible to be marked as a good of the U.S. in accordance with the Determination of Country of Origin for the Purposes of Marking Goods (CUSMA Countries) Regulations. Make sure to reference them in your short comments on other influencing factors.
 "Tariff Item/Article #
 
 Harmonized System (HS) Heading
@@ -140,16 +140,16 @@ Other made up clothing accessories, knitted or crocheted; knitted or crocheted p
 return a json response that is an extension of the original product data with the following fields:
 product_id	product_name	product_descp	product_image	og_inventory	og_supplier	og_supplier_info	og_cfoot	og_price	location	og_cost og_carbon_footprint new_carbon_footprint new_cost new_profit_margin total_savings comments_on_other_factors comments_on_supplier_choice
 
-Make sure your ENTIRE response is ONLY a json response so that I can simply just do json.loads(your_response) to get the data.
+Make sure your ENTIRE response is ONLY a json response so that I can simply just do json.loads(your_response) to get the data. Do NOT apply any other markdown formatting or anything. Just return a json response.
 
             '''
 
             #3.) pass to gemini ai
             summary = call_gemini_ai(prompt)
             print(summary)
-            # summary_dict = json.loads(summary)  # Parse the response into a dictionary
-            # print(summary_dict)
-            # ref.set(summary)
+            summary_dict = json.loads(summary)  # Parse the response into a dictionary
+            print(summary_dict)
+            ref.set(summary)
         return redirect(url_for('analytics'))
     return render_template('dashboard.html', form=form)
 
