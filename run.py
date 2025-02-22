@@ -3,8 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore 
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
-import pandas, dotenv, os
-
+import pandas, dotenv, os, uuid
 dotenv.load_dotenv(".env")
 
 app= Flask(__name__)
@@ -14,20 +13,15 @@ firebase_admin.initialize_app(credentials.Certificate("serviceAccountKey.json"),
 })
 db = firestore.client()
 
-
-
-# Retrieve data
-# user_doc = db.collection("users").document("user1").get()
-# if user_doc.exists:
-#     print(user_doc.to_dict())
-
 class uploadFile(FlaskForm):
     file=FileField("File")
     upload=SubmitField("Upload")
 
 @app.route('/')
 def home():
+    # send_to_Gemini("entry0")
     return render_template('home.html')
+
 
 @app.route('/dashboard', methods=["GET", "POST"])
 def dashboard():
@@ -37,20 +31,23 @@ def dashboard():
         data = pandas.read_csv(file)
         columns = data.columns
         for index, row in data.iterrows():
-            ref = db.collection("inventory_updates").document(f"entry{index}")
-            ref.set({
-               str(columns[0]): str(row[0]),
-               str(columns[1]): str(row[1]),
-               str(columns[2]): str(row[2]),
-            })
-        
+            ref = db.collection("inventory_updates").document(str(uuid.uuid4()))
+            entry = {}
+            for i in range(len(row)):   
+                entry[columns[i]] = row[i]
+            ref.set(entry)
         """
         TO DO 
-        - add data to firebase 
         - retrieve data from apps script from firebase
         """
     return render_template('dashboard.html', form=form)
 
+def send_to_Gemini(doc):
+    inventory_updates = db.collection("inventory_updates").document(doc).get() 
+    # inventory_updates has this format: {'Product': 'Apple', 'Cost/Unit': '50', 'Units': '2'}
+    # just send this obj to gemini 
+    
+    # print(inventory_updates.to_dict())
 
 if __name__ == '__main__':
     app.run()

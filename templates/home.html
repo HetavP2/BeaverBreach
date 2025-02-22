@@ -17,7 +17,7 @@
     position: relative;
     text-align: center;
     padding: 2rem;
-    transition: background-position 0.1s linear;
+    transition: background-position 3s linear;
   }
 
   /* Canadian flag-style sidebars */
@@ -26,7 +26,7 @@
     top: 0;
     bottom: 0;
     width: 20%;
-    background: rgb(200, 0, 0);
+    background: rgb(119, 0, 0);
   }
 
   .left-bar {
@@ -37,13 +37,38 @@
     right: 0;
   }
 
+  /* Title and slogan at the top */
+  .header-content {
+    position: absolute;
+    top: 2rem; /* Adjust the distance from the top */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10;
+  }
+
+  .header-content h1 {
+    color: #8b0000; /* Dark red */
+    font-size: 5rem; /* Increased size for larger title */
+    font-weight: bold; /* Bold font */
+    margin-bottom: 0.5rem;
+  }
+
+  .header-content p {
+    color: #8b0000; /* Dark red */
+    font-size: 1.25rem; /* Adjust font size for smaller text */
+  }
+
   .content {
     z-index: 10;
     max-width: 600px;
+    text-align: center;
   }
 
-  .content h1 {
+  .content p {
     color: #8b0000; /* Dark red */
+    font-size: 1.25rem; /* Adjust font size for smaller text */
+    margin-top: 1rem;
   }
 
   .cta-button {
@@ -68,8 +93,14 @@
     <div class="side-bar left-bar"></div>
     <div class="side-bar right-bar"></div>
 
+    <!-- Title and slogan at the top -->
+    <div class="header-content">
+        <h1>Breached Beaver</h1>
+        <p>We're not paying your ransom</p>
+    </div>
+
+    <!-- Centered content below the header -->
     <div class="content">
-        <h1 class="text-5xl font-bold mb-4">Welcome to Breached Beaver</h1>
         <p class="text-lg opacity-100">
             Analyze Tariff Impact. Find Canadian Suppliers. Make Optimal Decisions With Gemini.
         </p>
@@ -91,5 +122,5 @@
 {% endblock %}
 
 <!-- todo -->
-<!-- style dashboard, give data to gemini and generate response, create upload for csv and save to firebase  -->
+<!-- style dashboard, give data to gemini and generate response, create upload for csv and save to firebase -->
 <!--  -->
