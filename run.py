@@ -3,7 +3,8 @@ import firebase_admin
 from firebase_admin import credentials, firestore 
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
-import pandas, dotenv, os, uuid
+import pandas, dotenv, os
+
 dotenv.load_dotenv(".env")
 
 app= Flask(__name__)
@@ -19,9 +20,7 @@ class uploadFile(FlaskForm):
 
 @app.route('/')
 def home():
-    # send_to_Gemini("entry0")
     return render_template('home.html')
-
 
 @app.route('/dashboard', methods=["GET", "POST"])
 def dashboard():
@@ -31,11 +30,12 @@ def dashboard():
         data = pandas.read_csv(file)
         columns = data.columns
         for index, row in data.iterrows():
-            ref = db.collection("inventory_updates").document(str(uuid.uuid4()))
+            ref = db.collection("inventory_updates").document(f"{row[0]}")
             entry = {}
             for i in range(len(row)):   
                 entry[columns[i]] = row[i]
             ref.set(entry)
+            
         """
         TO DO 
         - retrieve data from apps script from firebase
@@ -51,10 +51,6 @@ def send_to_Gemini(doc):
 
 if __name__ == '__main__':
     app.run()
-
-# <!-- todo -->
-# <!-- style dashboard, give data to gemini and generate response, create upload for csv and save to firebase  -->
-# <!--  --> 
 
 # apis
 # https://www.youtube.com/watch?v=HiyfG0Kb0WM
