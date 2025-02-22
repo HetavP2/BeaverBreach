@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head %} 
+{% endblock %}
+{% block body %} 
+<form method="POST" enctype="multipart/form-data">
+       <!-- {{ form.csrf_token }}
+    {{ form.hidden_tag() }} -->
+<!-- <input type="file" value="Upload Excel" name="fileUpload"> -->
+{{form.hidden_tag()}}
+{{form.file()}}
+{{form.upload()}}</form>
+{% endblock %}
+
+<!-- todo -->
+<!-- style dashboard, give data to gemini and generate response, create upload for csv and save to firebase  -->
+<!--  -->
