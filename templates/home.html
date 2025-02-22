@@ -5,7 +5,8 @@
 
 <body>
 {% block content %}
-<main class=" bg-[url_for('static', '/images/imagebackground.png')] bg-cover bg-opacity-35 h-5/6 flex flex-col items-center relative">
+<main class="bg-[url('{{url_for('static', filename='/images/Screenshot 2025-02-22 182421.png') }}')] bg-center bg-cover bg-opacity-35 flex flex-col items-center relative">
+  <!-- <img src="" class="absolute"> -->
     <div class="absolute bg-black w-full h-full opacity-70 right-0 left-0 top-0 bottom-0"></div>
     <div class="z-40 justify-center flex flex-col w-1/2">
       <h1 class=" text-white text-opacity-100 text-center text-6xl mt-24 font-semibold">Breached Beaver</h1>
@@ -16,7 +17,7 @@
     </div>
   </main>
   {% endblock %}
-  
+
 {% block footer %}{% endblock %}
 </body>
 

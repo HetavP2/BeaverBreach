@@ -9,6 +9,25 @@ from werkzeug.utils import secure_filename
 from serpapi import GoogleSearch
 import requests
 import json
+import re  # Add this import at the top
+
+def sanitize_gemini_response(response):
+    # Remove any markdown code blocks
+    response = re.sub(r'```json\s*|\s*```', '', response, flags=re.MULTILINE)
+    
+    # Remove any leading/trailing whitespace
+    response = response.strip()
+    
+    # Try to fix common JSON formatting issues
+    try:
+        # Parse and re-serialize to ensure valid JSON
+        parsed = json.loads(response)
+        return json.dumps(parsed)
+    except json.JSONDecodeError:
+        # If parsing fails, try to clean up common issues
+        response = re.sub(r'[\n\r\t]', '', response)  # Remove newlines and tabs
+        response = re.sub(r',\s*}', '}', response)     # Remove trailing commas
+        return response
 
 
 dotenv.load_dotenv(".env")
@@ -146,10 +165,17 @@ Make sure your ENTIRE response is ONLY a json response so that I can simply just
 
             #3.) pass to gemini ai
             summary = call_gemini_ai(prompt)
-            print(summary)
-            summary_dict = json.loads(summary)  # Parse the response into a dictionary
-            print(summary_dict)
-            ref.set(summary)
+            # Sanitize the response
+            sanitized_summary = sanitize_gemini_response(summary)
+
+            try:
+                summary_dict = json.loads(sanitized_summary)  # Parse the sanitized response
+                ref.set(summary_dict)  # Push the DICTIONARY to Firebase
+                print("Firebase update successful")
+            except json.JSONDecodeError as e:
+                print(f"JSON Error: {e}")
+                # Fallback: Save raw text for debugging
+                ref.set({"error": str(e), "raw_response": sanitized_summary})
         return redirect(url_for('analytics'))
     return render_template('dashboard.html', form=form)
 
