@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block head %} 
+{% endblock %}
+{% block body %}
+Analytics
+<form method="POST" enctype="multipart/form-data" >
+    {{ form2.hidden_tag() }}
+    {{ form2.chat_prompt() }}
+    {{ form2.submit() }}
+</form>
+<!--Chat Section-->
+<div>
+  {% for message in chat_history %}
+    {% if message.role == "assistant" %}
+      <div class="">{{ message.text }}</div>
+    {% else %}
+    {% endif %}
+  {% endfor %}
+  
+</div>
+
+{% endblock %}

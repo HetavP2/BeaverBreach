@@ -14,6 +14,16 @@ API_KEY=os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-pro")
 
+# samplehis=[]
+# chat1 = model.start_chat(history=samplehis)
+# user_message = "I sold 60 units of stock."
+# response = chat1.send_message(user_message)
+# samplehis.append(response)
+# response = chat1.send_message("How much stock did i sell?", stream=True)
+# for chunk in response:
+#     print(chunk.text, end="", flush=True)
+
+
 
 firebase_admin.initialize_app(credentials.Certificate("serviceAccountKey.json"), {
     'databaseURL': ''
@@ -32,51 +42,39 @@ class chatting(FlaskForm):
 def home():
     return render_template('home.html')
 
-@app.route('/fetchAll', methods=["GET"])
-def fetchAll():
-    docs = db.collection("inventory_updates").stream()
-    # return json format of all the docs
-    return {"data": [doc.to_dict() for doc in docs]}
 
 @app.route('/dashboard', methods=["GET", "POST"])
 def dashboard():
     form = uploadFile()
-    form2 = chatting()
     if form.validate_on_submit():
         file = form.file.data
         data = pandas.read_csv(file)
         columns = data.columns
         for index, row in data.iterrows():
-            ref = db.collection("inventory_updates").document(f"{row[0]}")
+            ref = db.collection("inventory_updates").document(f"{row[1]}")
             entry = {}
             for i in range(len(row)):   
                 entry[columns[i]] = row[i]
             ref.set(entry)
-            
-    return render_template('dashboard.html', form=form, form2=form2)
-@app.route('/chat', methods=["GET", "POST"])
-def send_to_Gemini():
-    form2= chatting()
+        return redirect(url_for('analytics'))
+    return render_template('dashboard.html', form=form)
+
+chat_his=[]
+chat1 = model.start_chat(history=chat_his)
+
+@app.route('/analytics', methods=["GET", "POST"])
+def analytics():
+    form2 = chatting()
     if (request.method == "POST"):
         if form2.validate_on_submit():
-            pass
-            # data= form2.chat_prompt.data
-            # msg=data.get('chat', '')
-            # chat_history=data.get('history', [])
-            # chat_sess=model.start_chat(history=[chat_history])
-            # print(prmpt)
-            # res = model.generate_content("prmpt")
-            # print(res.text)
-    return redirect(url_for("dashboard"))
-
+            message = form2.chat_prompt.data
+            res = chat1.send_message(message, stream=True)
+            for chunk in res:
+                print(chunk.text, end="", flush=True)
+            chat_his.append(res)
     
-    # inventory_updates = db.collection("inventory_updates").document(doc).get()
-    # res = model.generate_content("This is a python dictionary:", inventory_updates, "Based on the information provided - product_id,product_name,product_descp,product_image,og_inventory,og_supplier,og_supplier_info,og_cfoot,og_price- for the store I need you to search on google for canadian suppliers that can offer this product.")
-    # print(res.text)
-    # inventory_updates has this format: {'Product': 'Apple', 'Cost/Unit': '50', 'Units': '2'}
-    # just send this obj to gemini 
+    return render_template('analytics.html', form2=form2, chat_history = chat_his)
     
-
 if __name__ == '__main__':
     app.run()
 

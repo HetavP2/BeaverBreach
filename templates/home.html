@@ -2,6 +2,11 @@
 
 {% block head %}
 <style>
+ 
+ body {
+  font-family: 'Poppins', sans-serif;
+}
+
   :root {
     --bg-position: 0%;
   }
@@ -20,27 +25,10 @@
     transition: background-position 3s linear;
   }
 
-  /* Canadian flag-style sidebars */
-  .side-bar {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 20%;
-    background: rgb(119, 0, 0);
-  }
-
-  .left-bar {
-    left: 0;
-  }
-
-  .right-bar {
-    right: 0;
-  }
-
   /* Title and slogan at the top */
   .header-content {
     position: absolute;
-    top: 3rem; /* Adjust the distance from the top */
+    top: 1.5rem; /* Adjust the distance from the top */
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -56,43 +44,46 @@
 
   .header-content h1 {
     color: rgb(255, 255, 255); /* Dark red */
-    font-size: 5rem; /* Increased size for larger title */
+    font-size: 3rem; /* Increased size for larger title */
     font-weight: bold; /* Bold font */
     margin-bottom: 0.5rem;
   }
 
   .header-content p {
     color: rgb(70, 0, 0); /* Dark red */
-    font-size: 2.25rem; /* Adjust font size for smaller text */
+    font-size: 1.25rem; /* Adjust font size for smaller text */
     margin-top: .5rem;
   }
 
   .content {
-    z-index: 10;
-    max-width: 600px;
-    text-align: center;
-  }
+  z-index: 10;
+  max-width: 650px;
+  text-align: center;
+  position: relative; /* Add this */
+  top: 50px; /* Adjust the top value to lower it */
+}
 
   .content p {
     color: #570000; /* Dark red */
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: bold; /* Adjust font size for smaller text */
-    margin-top: 1.5rem;
+    margin-top: 2.5rem;
   }
 
   .cta-button {
-    background-color: white;
-    color: #b91c1c;
+    background-color: rgb(110, 0, 0);
+    color: #ffffff;
+    font-size: 2rem;
     font-weight: bold;
-    padding: 12px 24px;
-    border-radius: 8px;
+    padding: 36px 144px;
+    border-radius: 16px;
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 50px;
     transition: background 0.2s;
   }
 
   .cta-button:hover {
-    background-color: #e5e5e5;
+    background-color: rgb(14, 0, 0);
   }
 </style>
 {% endblock %}
@@ -107,13 +98,13 @@
         <div class="title-box">
             <h1> Breached Beaver </h1>
         </div>
-        <p>We're not paying your ransom</p>
+        <p>We're Not Paying Your Ransom.</p>
     </div>
 
     <!-- Centered content below the header -->
     <div class="content">
         <p class="text-lg opacity-100">
-            Analyze Tariff Impact. Find Canadian Suppliers. Make Optimal Decisions With Gemini.
+            Analyze Tariff Impact. Find Canadian Suppliers. Make Optimal Decisions With The Help Of AI.
         </p>
         <a href="/dashboard" class="cta-button shadow-lg">Get Started</a>
     </div>
