@@ -1,0 +1,10 @@
+python-dotenv
+google.generativeai
+pandas
+wtforms
+flask_wtf
+flask
+firebase_admin
+gunicorn
+serpapi
+google-search-results

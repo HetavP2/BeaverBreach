@@ -105,7 +105,7 @@ def loading():
         params = {
         "engine": "google_shopping",
         "q": entry["product_name"]+" nearby manufactured in Canada",
-        "api_key": "fb780cada7255e9b5a6b8ba072632893e11060b8d6799bb877f8bb2072e43a74",
+        "api_key": os.getenv("SERP"),
         "gl": "ca",
         }
 
@@ -208,8 +208,18 @@ def analytics():
     if (request.method == "POST"):
         if form2.validate_on_submit():
             message = form2.chat_prompt.data
+
             messages.append(message)
-            res = chat1.send_message(message, stream=True)
+            with_context = f'''
+            The business owner gave you the prompt: {message}. Your goal is to answer this.
+            
+For context: You are an AI business consultant helping this business owner navigate US-Canada tarrif/trade war. 
+You recently gave suggestions to the business owner to mitigate the tarriffs impact on their business by suggesting local Canadian suppliers instead of the orginal US suppliers.
+
+Below is data about your suggestions for more context- you suggested these: 
+{all_rec[-1]}
+'''
+            res = chat1.send_message(with_context, stream=True)
             for chunk in res:
                 pass
                 # print(chunk.text, end="", flush=True)
