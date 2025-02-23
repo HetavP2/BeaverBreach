@@ -108,34 +108,37 @@
 {% endblock %}
 <body>
 {% block content %}
-<div class="flex flex-col items-center justify-center min-h-screen gradient-bg">
-    <div class="upload-box w-full max-w-2xl p-12"> <!-- Increased padding for height -->
-        <h2 class="title text-4xl font-bold text-center">Upload CSV File</h2> <!-- Increased title size -->
+<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-red-900 to-red-600">
+    <div class="w-full max-w-2xl p-12 bg-white rounded-xl shadow-xl">
+        <h2 class="text-4xl font-bold text-center text-red-800 mb-6">Upload CSV File</h2>
         
         <form method="POST" enctype="multipart/form-data" class="mt-6">
             {{ form.hidden_tag() }}
 
-            <div class="file-input-container">
-                <label for="file" class="file-label w-full flex flex-col items-center px-4 py-8 bg-gray-200 text-800 rounded-lg shadow-lg tracking-wide uppercase cursor-pointer hover:bg-blue-500 hover:text-white">
-                    <svg class="w-12 h-12 mb-4" fill="currentColor" viewBox="0 0 20 20"> <!-- Enlarged icon -->
+            <div class="flex flex-col items-center mb-6">
+                <label for="file" class="flex flex-col items-center px-6 py-8 bg-gray-200 text-gray-800 rounded-lg shadow-lg cursor-pointer hover:bg-red-800 hover:text-white transition-all duration-300">
+                    <svg class="w-12 h-12 mb-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M16.88 10.17A5 5 0 0015 2a4.93 4.93 0 00-3.06 1.06A4.93 4.93 0 009 2a5 5 0 00-1.88 9.17A7 7 0 003 18h14a7 7 0 00-0.12-7.83zM8 14v-2h4v2H8z"></path>
                     </svg>
-                    {{ form.file(class="block w-full text-center") }} <!-- Center-aligned input -->
-                    <span class="file-text">Select a CSV File</span> <!-- Increased text size & opacity -->
+                    {{ form.file(class="block w-full text-center text-transparent") }}
+                    <span class="text-lg font-semibold">Select a CSV File</span>
                 </label>
             </div>
 
-            {{ form.upload(class="btn-upload mt-6 w-full px-4 py-3 rounded-lg shadow") }} <!-- Adjusted spacing -->
+            <button type="submit" class="mt-6 w-full px-4 py-3 bg-red-900 text-white rounded-lg shadow hover:bg-red-700 transition-all duration-300">
+                Upload
+            </button>
         </form>
 
         {% if table_data %}
-            <h3 class="text-lg font-semibold text-dark-red mt-8">Preview:</h3> <!-- Adjusted spacing -->
+            <h3 class="text-lg font-semibold text-red-800 mt-8">Preview:</h3>
             <div class="overflow-x-auto mt-2">
                 {{ table_data | safe }}
             </div>
         {% endif %}
     </div>
 </div>
+
 {% endblock %}
 {% block footer %}{% endblock %}
 </body>
