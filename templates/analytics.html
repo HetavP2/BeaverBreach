@@ -2,16 +2,41 @@
  {% block head %} {% endblock %} 
  
 
-<body class="h-screen bg-gray-100">
+<body class="h-screen bg-blue-100">
 {% block content %}
   <!-- Main container -->
 <div class="flex h-full">
+  <table class="table-fixed">
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Impact of Tariffs</th>
+      <th>New Supplier</th>
+      <th>Change in Cost with New Supplier</th>
+      <th>Change in Carbon Footprint (KgCO2) with New Supplier</th>
+      <th>Comments on New Supplier</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in all_rec %}
+    <tr>
+      <td>{{row['product_name']}}</td>
+      <td>{{row['comments_on_other_factors']}}</td>
+      <td>{{row['new_supplier']}}</td>
+      <td>newcsot</td>
+      <td>{{row['new_carbon_footprint']}}</td>
+      <td>{{row['comments_on_supplier_choice']}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
   <!-- Left side (4 boxes 2x2, takes more space) -->
-  <div class="w-2/3 p-4 grid grid-cols-2 gap-4">
-    <div class="bg-blue-500 text-white flex items-center justify-center h-32 rounded-lg">Carbon Footprint</div>
+  <div class="w-2/3 p-4 grid grid-cols-5 gap-4">
+    <!-- <div class="bg-blue-500 text-white flex items-center justify-center h-32 rounded-lg">Carbon Footprint</div>
     <div class="bg-blue-500 text-white flex items-center justify-center h-32 rounded-lg">Effect of Tariffs</div>
     <div class="bg-blue-500 text-white flex items-center justify-center h-32 rounded-lg">Money Saved</div>
-    <div class="bg-blue-500 text-white flex items-center justify-center h-32 rounded-lg">Alternate Canadian Suppliers</div>
+    <div class="bg-blue-500 text-white flex items-center justify-center h-32 rounded-lg">Alternate Canadian Suppliers</div> -->
+  
   </div>
 
   <!-- Right side (Smaller Chatbot) -->
