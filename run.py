@@ -125,7 +125,7 @@ def dashboard():
             1.) Find a Canadian supplier for the product. Below are the top 6 results from Google Shopping. Make sure you pick a supplier who is CANADIAN and manufactures from CANADA:
             {shopping_results}
             Determine which one out of the results is the best supplier for the product. Your decision should ensure the supplier manufactures in Canada and is cheaper. Provide a short 20-30 word explanation for your choice.
-            2.) Calculate the carbon footprint of the Canadian supplier and the US supplier. Use tonnes of CO2e.
+            2.) Calculate the carbon footprint of the Canadian supplier and the US supplier. Use tonnes of CO2e. the values should be 
             You should assume the business is located in Waterloo, Ontario, Canada. The carbon footprint should be in kgCO2e. Use the current information about the product to calculate both the carbon footprint from the original US Supplier and then the Canadian Supplier you have selected based on search results. If you do not have enough info, make a prediction based on the product type, distance from supplier, etc and give a numerical value
             3.) Calculate the change in cost price from switching to the Canadian Supplier and profit margin (as a percentage, based on the original selling price of the product). Try to show that the price has decreased and the profit margin has increased, as you account for the 25% increase in tarrifs for the american supplier.
 
