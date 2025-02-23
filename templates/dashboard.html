@@ -108,34 +108,41 @@
 {% endblock %}
 <body>
 {% block content %}
-<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-red-900 to-red-600">
+<div class="flex flex-col items-center justify-center h-5/6 bg-gradient-to-r from-red-900 to-red-600">
     <div class="w-full max-w-2xl p-12 bg-white rounded-xl shadow-xl">
         <h2 class="text-4xl font-bold text-center text-red-800 mb-6">Upload CSV File</h2>
         
-        <form method="POST" enctype="multipart/form-data" class="mt-6">
-            {{ form.hidden_tag() }}
+<form method="POST" enctype="multipart/form-data" class="mt-6">
+    {{ form.hidden_tag() }}
 
-            <div class="flex flex-col items-center mb-6">
-                <label for="file" class="flex flex-col items-center px-6 py-8 bg-gray-200 text-gray-800 rounded-lg shadow-lg cursor-pointer hover:bg-red-800 hover:text-white transition-all duration-300">
-                    <svg class="w-12 h-12 mb-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M16.88 10.17A5 5 0 0015 2a4.93 4.93 0 00-3.06 1.06A4.93 4.93 0 009 2a5 5 0 00-1.88 9.17A7 7 0 003 18h14a7 7 0 00-0.12-7.83zM8 14v-2h4v2H8z"></path>
-                    </svg>
-                    {{ form.file(class="block w-full text-center text-transparent") }}
-                    <span class="text-lg font-semibold">Select a CSV File</span>
-                </label>
-            </div>
+    <div class="flex flex-col items-center mb-6">
+        <label for="file" class="flex flex-col items-center px-6 py-8 bg-gray-100 text-gray-700 rounded-lg shadow-lg cursor-pointer hover:bg-red-600 hover:text-white transition-all duration-300">
+            
+            <input type="file" id="file" name="file" class="hidden" onchange="updateFileName()">
+            <span class="text-lg font-semibold" id="file-name">Select a CSV File</span>
+        </label>
+        <!-- Display the selected file name here -->
+        <span id="file-name-display" class="mt-2 text-sm text-gray-600"></span>
+    </div>
 
-            <button type="submit" class="mt-6 w-full px-4 py-3 bg-red-900 text-white rounded-lg shadow hover:bg-red-700 transition-all duration-300">
-                Upload
-            </button>
-        </form>
+    <button type="submit" class="mt-6 w-full px-4 py-3 bg-red-900 text-white rounded-lg shadow hover:bg-red-700 transition-all duration-300">
+        Upload
+    </button>
+</form>
 
-        {% if table_data %}
-            <h3 class="text-lg font-semibold text-red-800 mt-8">Preview:</h3>
-            <div class="overflow-x-auto mt-2">
-                {{ table_data | safe }}
-            </div>
-        {% endif %}
+<script>
+    function updateFileName() {
+        const fileInput = document.getElementById('file');
+        const fileNameDisplay = document.getElementById('file-name');
+        const fileNameLabel = document.getElementById('file-name-display');
+        
+        if (fileInput.files && fileInput.files[0]) {
+            fileNameDisplay.textContent = fileInput.files[0].name;
+        }
+    }
+</script>
+
+        
     </div>
 </div>
 

@@ -70,7 +70,7 @@ firebase_admin.initialize_app(credentials.Certificate("serviceAccountKey.json"),
 db = firestore.client()
 
 class uploadFile(FlaskForm):
-    file=FileField("File")
+    file=FileField("a File: ")
     upload=SubmitField("Upload")
 
 class chatting(FlaskForm):
