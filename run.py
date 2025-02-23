@@ -93,6 +93,7 @@ def loading():
 
 
     for index, row in data.iterrows():
+        print(row)
         # looping thru each
         doc_id = str(index)
         ref = db.collection("inventory_updates").document(f"{doc_id}")
@@ -177,8 +178,7 @@ Make sure your ENTIRE response is ONLY a json response so that I can simply just
             # print(f"JSON Error: {e}")
             # Fallback: Save raw text for debugging
             ref.set({"error": str(e), "raw_response": sanitized_summary})
-        return redirect(url_for('analytics'))
-    return render_template('loading.html')
+    return redirect(url_for('analytics'))
 
 @app.route('/dashboard', methods=["GET", "POST"])
 def dashboard():
@@ -218,6 +218,8 @@ You recently gave suggestions to the business owner to mitigate the tarriffs imp
 
 Below is data about your suggestions for more context- you suggested these: 
 {all_rec}
+
+do not address the business owner directly, just answer the prompt.
 '''
             res = chat1.send_message(with_context, stream=True)
             for chunk in res:
