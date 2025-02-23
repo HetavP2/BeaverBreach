@@ -6,12 +6,16 @@
     {% block content %}
       <!-- Main container -->
 
-      <div>
-        
-      </div>
     <div class="w-full h-full grid grid-cols-3 grid-rows-1">
-    <div class="col-span-2">
-  <table class="table-fixed bg-slate-100">
+    <div class="col-span-2 grid grid-rows-3 grid-cols-1">
+    <div class="w-full grid grid-rows-1 grid-cols-2 justify-center">
+      <iframe src="https://docs.google.com/document/d/1lGHRuudtHDNykcxBXqEFmActAvIgZuRft7lR9BduABo/edit?usp=sharing" width="100%" height="100%" class="inline-block">
+      </iframe>
+      
+      <iframe src="https://docs.google.com/document/d/1lGHRuudtHDNykcxBXqEFmActAvIgZuRft7lR9BduABo/edit?usp=sharing" width="100%" height="100%" class=" inline-block">
+      </iframe>
+    </div>
+  <table class="table-fixed bg-slate-100 row-span-2">
     <thead>
       <tr>
         <th>Product Name</th>
@@ -53,7 +57,7 @@
           <p>{{ row['comments_on_other_factors'] }}</p>
           <button onclick="closeModal('modal-{{ loop.index }}-tariffs')" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
             Close
-          </button>
+          </button> 
         </div>
       </div>
 
