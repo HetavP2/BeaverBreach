@@ -2,32 +2,52 @@
  {% block head %} {% endblock %} 
  
 
-<body class="h-screen bg-blue-100">
+<body class="w-screen h-screen bg-blue-100">
 {% block content %}
   <!-- Main container -->
-<div class="flex h-full">
-  <table class="table-fixed">
-  <thead>
-    <tr>
-      <th>Product Name</th>
-      <th>Impact of Tariffs</th>
-      <th>New Supplier</th>
-      <th>Change in Cost with New Supplier</th>
-      <th>Change in Carbon Footprint (KgCO2) with New Supplier</th>
-      <th>Comments on New Supplier</th>
+<div class="w-full h-ful grid grid-cols-3">
+  <div class="">
+    <table class="table-fixed bg-slate-100">
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Impact of Tariffs</th>
+          <th>New Supplier</th>
+          <th>Change in Cost with New Supplier</th>
+          <th>Change in Carbon Footprint (KgCO2) with New Supplier</th>
+          <th>Comments on New Supplier</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in all_rec %}
+        <tr class="h-20 text-center border-b border-gray-300">
+      <td class="w-64 px-6 py-3">{{ row['product_name'] }}</td>
+      <td class="w-80 px-6 py-3">
+        <details class="cursor-pointer">
+          <summary class="text-blue-500 underline">View</summary>
+          <p class="mt-2 p-3 bg-gray-100 rounded-md">{{ row['comments_on_other_factors'] }}</p>
+        </details>
+      </td>
+      <td class="w-64 px-6 py-3">{{ row['new_supplier'] }}</td>
+      <td class="w-40 px-6 py-3">-{{ row['og_price'] - row['new_cost'] }}</td>
+      <td class="w-64 px-6 py-3">{{ row['new_carbon_footprint'] }}</td>
+      <td class="w-80 px-6 py-3">
+        <details class="cursor-pointer">
+          <summary class="text-blue-500 underline">View</summary>
+          <p class="mt-2 p-3 bg-gray-100 rounded-md">{{ row['comments_on_supplier_choice'] }}</p>
+        </details>
+      </td>
     </tr>
-  </thead>
-  <tbody>
-    <!-- {% for row in all_rec %}
-    <tr>
+  </div>
+    <!-- <tr>
       <td>{{row['product_name']}}</td>
       <td>{{row['comments_on_other_factors']}}</td>
       <td>{{row['new_supplier']}}</td>
       <td>-{{row['og_price']-row['new_cost']}}</td>
-      <td>{{row['comments_on_supplier_choice']}}</td>
       <td>{{row['new_carbon_footprint']}}</td>
-    </tr>
-    {% endfor %} -->
+      <td>{{row['comments_on_supplier_choice']}}</td>
+    </tr> -->
+    {% endfor %}
   </tbody>
 </table>
   <!-- Left side (4 boxes 2x2, takes more space) -->
