@@ -217,7 +217,7 @@ For context: You are an AI business consultant helping this business owner navig
 You recently gave suggestions to the business owner to mitigate the tarriffs impact on their business by suggesting local Canadian suppliers instead of the orginal US suppliers.
 
 Below is data about your suggestions for more context- you suggested these: 
-{all_rec[-1]}
+{all_rec}
 '''
             res = chat1.send_message(with_context, stream=True)
             for chunk in res:

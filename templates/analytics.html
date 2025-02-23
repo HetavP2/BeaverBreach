@@ -2,7 +2,7 @@
     {% block head %} {% endblock %} 
     
 
-    <body class="w-screen h-screen bg-blue-100">
+    <body class="w-screen h-screen bg-red-100">
     {% block content %}
       <!-- Main container -->
 
@@ -10,62 +10,63 @@
   <div class="col-span-2 grid grid-rows-3 grid-cols-1">
     
     <div class="w-full grid grid-rows-1 grid-cols-2 justify-center">
-      <iframe src="https://docs.google.com/document/d/1lGHRuudtHDNykcxBXqEFmActAvIgZuRft7lR9BduABo/edit?usp=sharing" width="100%" height="100%" class="inline-block"></iframe>
-      <iframe src="https://docs.google.com/document/d/1lGHRuudtHDNykcxBXqEFmActAvIgZuRft7lR9BduABo/edit?usp=sharing" width="100%" height="100%" class="inline-block"></iframe>
+      <iframe src="https://docs.google.com/document/d/1lGHRuudtHDNykcxBXqEFmActAvIgZuRft7lR9BduABo/edit?usp=sharing" width="100%" height="100%" class="inline-block border-2 border-evilred"></iframe>
+      <iframe src="https://docs.google.com/document/d/1lGHRuudtHDNykcxBXqEFmActAvIgZuRft7lR9BduABo/edit?usp=sharing" width="100%" height="100%" class="inline-block border-2 border-evilred"></iframe>
     </div>
 
-    <!-- Scrollable Table Container -->
-    <div class="h-96 overflow-y-auto border border-gray-300 shadow-md">
-      <table class="table-fixed bg-slate-100 w-full">
-        <thead class="bg-gray-200 sticky top-0 shadow">
-          <tr>
-            <th class="p-2">Icon</th>
-            <th class="p-2">Product Name</th>
-            <th class="p-2">Impact of Tariffs</th>
-            <th class="p-2">New Supplier</th>
-            <th class="p-2">Change in Cost</th>
-            <th class="p-2">Carbon Footprint</th>
-            <th class="p-2">Comments</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in all_rec %}
-          <tr class="h-20 text-center border-b border-gray-300">
-            <td class="w-64 px-6 py-3"><img src="{{ row['product_image'] }}" class="w-16" /></td>
-            <td class="w-64 px-6 py-3">{{ row['product_name'] }}</td>
-            <td class="w-80 px-6 py-3">
-              <button onclick="openModal('modal-{{ loop.index }}-tariffs')" class="text-red-500 underline">View</button>
-            </td>
-            <td class="w-64 px-6 py-3">{{ row['new_supplier_name'] }}</td>
-            <td class="w-40 px-6 py-3">${{ '{0:0.2f}'.format(row['new_cost'] - row['og_cost']) }}</td>
-            <td class="w-64 px-6 py-3">{{ '{0:0.2f}'.format(row['new_carbon_footprint'] - row['og_carbon_footprint']) }} KgCO2</td>
-            <td class="w-80 px-6 py-3">
-              <button onclick="openModal('modal-{{ loop.index }}-supplier')" class="text-blue-500 underline">View</button>
-            </td>
-          </tr>
+<!-- Scrollable Table Container -->
+<div class="h-96 overflow-y-auto border border-gray-300 shadow-md relative">
+  <table class="table-fixed bg-slate-100 w-full">
+    <thead class="bg-gray-200 sticky top-0 shadow z-10">
+      <tr>
+        <th class="p-2">Icon</th>
+        <th class="p-2">Product Name</th>
+        <th class="p-2">Impact of Tariffs</th>
+        <th class="p-2">New Supplier</th>
+        <th class="p-2">Change in Cost</th>
+        <th class="p-2">Carbon Footprint</th>
+        <th class="p-2">Comments</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in all_rec %}
+      <tr class="h-20 text-center border-b border-gray-300">
+        <td class="w-64 px-6 py-3"><img src="{{ row['product_image'] }}" class="w-16" /></td>
+        <td class="w-64 px-6 py-3">{{ row['product_name'] }}</td>
+        <td class="w-80 px-6 py-3">
+          <button onclick="openModal('modal-{{ loop.index }}-tariffs')" class="text-red-500 underline">View</button>
+        </td>
+        <td class="w-64 px-6 py-3">{{ row['new_supplier_name'] }}</td>
+        <td class="w-40 px-6 py-3">${{ '{0:0.2f}'.format(row['new_cost'] - row['og_cost']) }}</td>
+        <td class="w-64 px-6 py-3">{{ '{0:0.2f}'.format(row['new_carbon_footprint'] - row['og_carbon_footprint']) }} KgCO2</td>
+        <td class="w-80 px-6 py-3">
+          <button onclick="openModal('modal-{{ loop.index }}-supplier')" class="text-red-500 underline">View</button>
+        </td>
+      </tr>
 
-          <!-- Modal for Impact of Tariffs -->
-          <div id="modal-{{ loop.index }}-tariffs" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg w-1/3">
-              <h2 class="text-lg font-semibold mb-4">Impact of Tariffs</h2>
-              <p>{{ row['comments_on_other_factors'] }}</p>
-              <button onclick="closeModal('modal-{{ loop.index }}-tariffs')" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button> 
-            </div>
-          </div>
+      <!-- Modal for Impact of Tariffs -->
+      <div id="modal-{{ loop.index }}-tariffs" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-[1000]">
+        <div class="bg-white p-6 rounded-lg w-1/3">
+          <h2 class="text-lg font-semibold mb-4">Impact of Tariffs</h2>
+          <p>{{ row['comments_on_other_factors'] }}</p>
+          <button onclick="closeModal('modal-{{ loop.index }}-tariffs')" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button> 
+        </div>
+      </div>
 
-          <!-- Modal for Comments on New Supplier -->
-          <div id="modal-{{ loop.index }}-supplier" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg w-1/3">
-              <h2 class="text-lg font-semibold mb-4">Comments on New Supplier</h2>
-              <p>{{ row['comments_on_supplier_choice'] }}</p>
-              <button onclick="closeModal('modal-{{ loop.index }}-supplier')" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
-            </div>
-          </div>
+      <!-- Modal for Comments on New Supplier -->
+      <div id="modal-{{ loop.index }}-supplier" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-[1000]">
+        <div class="bg-white p-6 rounded-lg w-1/3">
+          <h2 class="text-lg font-semibold mb-4">Comments on New Supplier</h2>
+          <p>{{ row['comments_on_supplier_choice'] }}</p>
+          <button onclick="closeModal('modal-{{ loop.index }}-supplier')" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+        </div>
+      </div>
 
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
   </div>
 <!-- JavaScript for Opening and Closing Modals -->
 <script>
@@ -80,14 +81,14 @@
 
 
       <!-- Right side (Smaller Chatbot) -->
-      <div id="chat-container" class="h-screen flex flex-col mx-4 col-span-1">
+      <div id="chat-container" class="h-screen flex flex-col mx-4 col-span-1 border">
         <div class="bg-white shadow-md rounded-lg flex-grow p-4 overflow-y-auto max-h-[80vh]">
           <!-- Chatbox -->
           <div id="chatbox" class="h-full overflow-y-auto">
             {% for i in range(chat_history|length) %}
               {% if chat_history[i].candidates[0].content.role == "model" %}
                 <div class="mb-2 text-right">
-                  <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block">
+                  <p class="bg-red-500 text-white rounded-lg py-2 px-4 inline-block">
                     {{ messages[i] }}
                   </p>
                 </div>
@@ -104,8 +105,8 @@
         <!-- Chat Input -->
         <form method="POST" enctype="multipart/form-data" class="p-4 border-t flex">
           {{ form2.hidden_tag() }}
-          {{ form2.chat_prompt(id="user-input", type="text", placeholder="Type a message", class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500") }}
-          {{ form2.submit(id="send-button", class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 transition duration-300") }}
+          {{ form2.chat_prompt(id="user-input", type="text", placeholder="Type a message", class="w-full px-3 py-2 border rounded-l-md focus:outline-none bg-white focus:ring-2 focus:ring-red-500 p-2") }}
+          {{ form2.submit(id="send-button", class="bg-red-500 text-white px-4 py-2 rounded-r-md hover:bg-red-600 transition duration-300 p-2") }}
         </form>
       </div>
     </div>
