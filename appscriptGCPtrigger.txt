@@ -1,0 +1,263 @@
+const CONFIG = {
+  FOLDER_ID: '',
+  GEMINI_API_KEY: '',
+  EMAIL_RECIPIENTS: ['', ""],
+  DOC_TITLE: 'US Tariffs Mitigation - Modified Product Summary',
+  SHEET_TITLE: 'US Tariffs Mitigation - Modified Inventory',
+  API_ENDPOINT: 'https://beaverbreachfetch.onrender.com/fetchAll'
+};
+
+function doGet(e) {
+  try {
+    const result = fetchAndProcessData();
+    return ContentService.createTextOutput(JSON.stringify({
+      status: 'success',
+      message: result
+    }))
+    .setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: 'error',
+      message: error.toString()
+    }))
+    .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function fetchAndProcessData() {
+  try {
+    // Fetch data from the API with error handling
+    const options = {
+      'muteHttpExceptions': true,
+      'method': 'get',
+      'contentType': 'application/json'
+    };
+    
+    const response = UrlFetchApp.fetch(CONFIG.API_ENDPOINT, options);
+    const responseCode = response.getResponseCode();
+    const contentText = response.getContentText();
+    
+    // Check if response is successful
+    if (responseCode !== 200) {
+      throw new Error(`API request failed with status ${responseCode}: ${contentText}`);
+    }
+    
+    // Try to parse the JSON response
+    let jsonResponse;
+    try {
+      jsonResponse = JSON.parse(contentText);
+    } catch (e) {
+      throw new Error(`Failed to parse API response as JSON: ${contentText.substring(0, 100)}...`);
+    }
+    
+    // Validate response structure
+    if (!jsonResponse.data || !Array.isArray(jsonResponse.data)) {
+      throw new Error('Invalid API response structure: missing data array');
+    }
+    
+    const records = jsonResponse.data;
+    if (records.length === 0) {
+      throw new Error('No records found in API response');
+    }
+    
+    const folder = DriveApp.getFolderById(CONFIG.FOLDER_ID);
+    const { doc, emailBody } = createAndPopulateDocument(records, folder);
+    const sheet = createAndPopulateSpreadsheet(records, folder);
+    
+    // Share both files with viewers
+    shareFiles(doc, sheet);
+    
+    // Send email notification
+    sendEmailNotification(doc, sheet, emailBody);
+    
+    return {
+      documentUrl: doc.getUrl(),
+      spreadsheetUrl: sheet.getUrl()
+    };
+    
+  } catch (error) {
+    Logger.log('Error in fetchAndProcessData: ' + error.toString());
+    throw error;
+  }
+}
+
+
+
+function createAndPopulateDocument(records, folder) {
+  const doc = DocumentApp.create(CONFIG.DOC_TITLE);
+  moveFileToFolder(doc.getId(), folder);
+  const body = doc.getBody();
+
+  // Title and date
+  const titleParagraph = body.appendParagraph(CONFIG.DOC_TITLE);
+  titleParagraph.setHeading(DocumentApp.ParagraphHeading.TITLE);
+  titleParagraph.setBold(true);
+  
+  const dateParagraph = body.appendParagraph(`Generated on: ${new Date().toLocaleString()}`);
+  dateParagraph.setItalic(true);
+  
+  // Reduced spacing after title section
+  body.appendParagraph('').setLineSpacing(1);
+
+  records.forEach((record, index) => {
+    const summary = callGeminiAI(JSON.stringify(record, null, 2));
+
+    // Product heading - using HEADING3 instead of HEADING2 to reduce spacing
+    const productHeading = body.appendParagraph(`Product #${index + 1}: ${record.product_name}`);
+    productHeading.setHeading(DocumentApp.ParagraphHeading.HEADING3);
+    productHeading.setBold(true);
+
+    // Add image if available with error handling and improved sizing
+    if (record.product_image) {
+      try {
+        const options = {
+          'muteHttpExceptions': true,
+          'validateHttpsCertificates': false,
+          'followRedirects': true,
+          'headers': {
+            'User-Agent': 'Mozilla/5.0',
+            'Accept': 'image/*'
+          }
+        };
+        
+        const response = UrlFetchApp.fetch(record.product_image, options);
+        const responseCode = response.getResponseCode();
+        
+        if (responseCode === 200) {
+          // Create a centered paragraph for the image
+          const imageParagraph = body.appendParagraph('');
+          imageParagraph.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
+          
+          // Add image with fixed dimensions for a moderate vertical rectangle
+          const image = imageParagraph.appendInlineImage(response.getBlob());
+          image.setWidth(300).setHeight(400);
+        } else {
+          const paragraph = body.appendParagraph('🖼️ Image available at: ');
+          paragraph.appendText(record.product_image).setLinkUrl(record.product_image);
+          paragraph.setItalic(true);
+        }
+      } catch (error) {
+        Logger.log('Error fetching image: ' + error.toString());
+        const paragraph = body.appendParagraph('🖼️ Image available at: ');
+        paragraph.appendText(record.product_image).setLinkUrl(record.product_image);
+        paragraph.setItalic(true);
+      }
+    }
+
+    // Helper function to create formatted paragraphs
+    function appendFormattedLine(text, isBold = false, isItalic = false) {
+      const paragraph = body.appendParagraph(text);
+      if (isBold) paragraph.setBold(true);
+      if (isItalic) paragraph.setItalic(true);
+      return paragraph;
+    }
+
+    // Add details with formatting
+    appendFormattedLine(`🆔 Product ID: ${record.product_id}`, true);
+    appendFormattedLine(`🏷️ Description: ${record.product_descp}`, true);
+    appendFormattedLine(`💰 Original Cost: $${record.og_cost}`, true);
+    appendFormattedLine(`💰 New Cost: $${record.new_cost}`, true);
+    appendFormattedLine(`📦 Inventory: ${record.og_inventory}`, true);
+    appendFormattedLine(`🔄 Supplier Change: ${record.og_supplier_name} → ${record.new_supplier_name}`, true);
+    appendFormattedLine(`🌱 Carbon Footprint: ${record.og_carbon_footprint} → ${record.new_carbon_footprint}`, true);
+    appendFormattedLine(`💸 Total Savings: ${record.total_savings}`, true);
+
+    // Summary section with reduced spacing
+    const summaryHeading = body.appendParagraph('\nSummary Analysis:');
+    summaryHeading.setHeading(DocumentApp.ParagraphHeading.HEADING4);
+    summaryHeading.setBold(true);
+    
+    const summaryText = body.appendParagraph(summary);
+    summaryText.setItalic(true);
+    
+    // Add separator between products with controlled spacing
+    if (index < records.length - 1) {
+      body.appendParagraph('').appendHorizontalRule();
+    }
+  });
+
+  doc.saveAndClose();
+  return { doc: DriveApp.getFileById(doc.getId()) };
+}
+
+
+
+
+function createAndPopulateSpreadsheet(records, folder) {
+  const sheetFile = SpreadsheetApp.create(CONFIG.SHEET_TITLE);
+  moveFileToFolder(sheetFile.getId(), folder);
+  const spreadsheet = sheetFile.getActiveSheet();
+
+  const headers = Object.keys(records[0]).filter(header => header !== 'location');
+  const headerRange = spreadsheet.getRange(1, 1, 1, headers.length);
+  headerRange.setValues([headers])
+    .setFontWeight("bold")
+    .setBackground("#FFFACD");
+
+  const dataRows = records.map(record => headers.map(header => record[header] || ''));
+  spreadsheet.getRange(2, 1, dataRows.length, headers.length).setValues(dataRows);
+  spreadsheet.autoResizeColumns(1, headers.length);
+
+  return DriveApp.getFileById(sheetFile.getId());
+}
+
+function moveFileToFolder(fileId, folder) {
+  const file = DriveApp.getFileById(fileId);
+  folder.addFile(file);
+  DriveApp.getRootFolder().removeFile(file);
+}
+
+function shareFiles(doc, sheet) {
+  CONFIG.EMAIL_RECIPIENTS.forEach(email => {
+    doc.addViewer(email);
+    sheet.addViewer(email);
+  });
+}
+
+function sendEmailNotification(doc, sheet, emailBody) {
+  const emailSubject = `${CONFIG.DOC_TITLE} - ${new Date().toLocaleDateString()}`;
+  const emailTemplate = `
+    Product Data Summary has been generated successfully.
+    
+    ${emailBody}
+    
+    Access the full documents here:
+    - Summary Document: ${doc.getUrl()}
+    - Detailed Spreadsheet: ${sheet.getUrl()}
+    
+    This is an automated message.
+  `;
+  
+  MailApp.sendEmail({
+    to: CONFIG.EMAIL_RECIPIENTS.join(','),
+    subject: emailSubject,
+    body: emailTemplate
+  });
+}
+
+function callGeminiAI(text) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CONFIG.GEMINI_API_KEY}`;
+  
+  const payload = {
+    contents: [{
+      parts: [{
+        text: `Please provide a concise summary of this product data: ${text}`
+      }]
+    }]
+  };
+  
+  const options = {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(payload)
+  };
+  
+  try {
+    const response = UrlFetchApp.fetch(url, options);
+    const data = JSON.parse(response.getContentText());
+    return data.candidates[0].content.parts[0].text;
+  } catch (error) {
+    Logger.log('Error calling Gemini AI: ' + error);
+    return 'Summary unavailable due to error.';
+  }
+}
