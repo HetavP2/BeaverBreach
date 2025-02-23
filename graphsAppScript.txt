@@ -1,0 +1,118 @@
+function createSheetsAndGenerateGraphs() {
+  // Create first sheet
+  var ss1 = SpreadsheetApp.create("City Data Graph");
+  var sheet1 = ss1.getActiveSheet();
+  
+  // Populate data for first graph - Transposed data for better column chart
+  var data1 = [
+    ["Date", "Toronto", "Vancouver", "Montreal", "Calgary", "Ottawa"],
+    ["Jan 20", 327.42, 405.86, 414.84, 518.34, 382.95],
+    ["Jan 27", 325.91, 402.19, 444.29, 514.98, 410.72],
+    ["Feb 3", 265.23, 340.60, 337.25, 499.13, 324.45],
+    ["Feb 10", 231.24, 344.88, 291.78, 463.23, 301.64],
+    ["Feb 17", 217.86, 395.95, 304.54, 494.76, 279.64]
+  ];
+  sheet1.getRange(1, 1, data1.length, data1[0].length).setValues(data1);
+  
+  // Create a column chart with enhanced legend
+  var chart1 = sheet1.newChart()
+    .setChartType(Charts.ChartType.COLUMN)
+    .addRange(sheet1.getRange("A1:F6"))
+    .setPosition(8, 1, 0, 0)
+    .setOption('title', 'Real-time Local Business Condition Index (RTLBCI) - Weekly')
+    .setOption('titleTextStyle', {
+      fontSize: 14,
+      bold: true
+    })
+    .setOption('width', 800)
+    .setOption('height', 400)
+    .setOption('legend', {
+      position: 'bottom',
+      textStyle: {fontSize: 12},
+      alignment: 'center',
+      maxLines: 2
+    })
+    .setOption('tooltip', {
+      trigger: 'focus',
+      isHtml: true,
+      showColorCode: true
+    })
+    .setOption('focusTarget', 'category')
+    .setOption('vAxes', {
+      0: {
+        title: 'Price Index Values',
+        viewWindow: {min: 0},
+        format: '###.##'
+      }
+    })
+    .setOption('hAxis', {
+      title: 'Time Period',
+      textStyle: {fontSize: 10}
+    })
+    .build();
+  sheet1.insertChart(chart1);
+  
+  // Create second sheet
+  var ss2 = SpreadsheetApp.create("Industry Data Graph");
+  var sheet2 = ss2.getActiveSheet();
+  
+  // Populate data for second graph
+  var data2 = [
+    ["Month", "Clothing", "Retail", "Transport", "Shelter", "Food"],
+    ["Sep", 92.8, 161.1, 169.3, 183.5, 190.3],
+    ["Oct", 95.0, 161.8, 169.9, 184.8, 190.5],
+    ["Nov", 94.2, 161.8, 170.4, 185.3, 191.5],
+    ["Dec", 91.4, 161.2, 173.4, 185.8, 188.0],
+    ["Jan", 91.4, 161.3, 173.1, 186.4, 187.0]
+  ];
+  sheet2.getRange(1, 1, data2.length, data2[0].length).setValues(data2);
+  
+  // Create a stacked column chart with enhanced legend
+  var chart2 = sheet2.newChart()
+    .setChartType(Charts.ChartType.COLUMN)
+    .addRange(sheet2.getRange("A1:F6"))
+    .setPosition(8, 1, 0, 0)
+    .setOption('title', 'Industrial Product Price Index - Monthly')
+    .setOption('titleTextStyle', {
+      fontSize: 14,
+      bold: true
+    })
+    .setOption('width', 800)
+    .setOption('height', 400)
+    .setOption('legend', {
+      position: 'right',
+      textStyle: {fontSize: 12},
+      alignment: 'start',
+      maxLines: 1
+    })
+    .setOption('isStacked', true)
+    .setOption('tooltip', {
+      trigger: 'focus',
+      isHtml: true,
+      showColorCode: true
+    })
+    .setOption('focusTarget', 'category')
+    .setOption('vAxes', {
+      0: {
+        title: 'Index Value',
+        viewWindow: {min: 0},
+        format: '###.##'
+      }
+    })
+    .setOption('hAxis', {
+      title: 'Month (2023-2024)',
+      textStyle: {fontSize: 10}
+    })
+    .build();
+  sheet2.insertChart(chart2);
+  
+  var links = {
+    sheet1Link: ss1.getUrl(),
+    sheet2Link: ss2.getUrl()
+  };
+  
+  Logger.log("Sheet 1 URL: " + links.sheet1Link);
+  Logger.log("Sheet 2 URL: " + links.sheet2Link);
+  
+  return links;
+}
